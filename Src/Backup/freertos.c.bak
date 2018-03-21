@@ -1,0 +1,547 @@
+/**
+  ******************************************************************************
+  * File Name          : freertos.c
+  * Description        : Code for freertos applications
+  ******************************************************************************
+  * This notice applies to any and all portions of this file
+  * that are not between comment pairs USER CODE BEGIN and
+  * USER CODE END. Other portions of this file, whether 
+  * inserted by the user or by software development tools
+  * are owned by their respective copyright owners.
+  *
+  * Copyright (c) 2018 STMicroelectronics International N.V. 
+  * All rights reserved.
+  *
+  * Redistribution and use in source and binary forms, with or without 
+  * modification, are permitted, provided that the following conditions are met:
+  *
+  * 1. Redistribution of source code must retain the above copyright notice, 
+  *    this list of conditions and the following disclaimer.
+  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  *    this list of conditions and the following disclaimer in the documentation
+  *    and/or other materials provided with the distribution.
+  * 3. Neither the name of STMicroelectronics nor the names of other 
+  *    contributors to this software may be used to endorse or promote products 
+  *    derived from this software without specific written permission.
+  * 4. This software, including modifications and/or derivative works of this 
+  *    software, must execute solely and exclusively on microcontroller or
+  *    microprocessor devices manufactured by or for STMicroelectronics.
+  * 5. Redistribution and use of this software other than as permitted under 
+  *    this license is void and will automatically terminate your rights under 
+  *    this license. 
+  *
+  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
+  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
+  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  *
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
+#include "FreeRTOS.h"
+#include "task.h"
+#include "cmsis_os.h"
+#include "includes.h"
+#include "ff_gen_drv.h"
+#include "sd_diskio.h"
+
+/* USER CODE BEGIN Includes */     
+
+/* USER CODE END Includes */
+
+/* Variables -----------------------------------------------------------------*/
+osThreadId defaultTaskHandle;
+osThreadId TouchTaskHandle;
+osThreadId GuiTaskHandle;
+osThreadId SoundTaskHandle;
+osThreadId FileTaskHandle;
+
+/* USER CODE BEGIN Variables */
+
+typedef struct {
+	int audio_state;
+	int data_size;
+	TCHAR * buffer;
+} audio_msg_t;
+
+static const GUI_ConstString speed[] = {
+	"50 ms/div",	// 1 
+	"250 ms/div",	// 5
+	"500 ms/div", 	// 10
+	"2.5 s/div", 	// 50
+	"5.0 s/div", 	// 100
+	NULL 
+};
+static GUI_ConstString file_test[20];
+int file_idx=0;
+FIL fileR;
+
+osMessageQId AudioQueue;
+osMessageQDef(AudioQueue, 2, audio_msg_t);
+
+
+/* USER CODE END Variables */
+
+/* Function prototypes -------------------------------------------------------*/
+void StartDefaultTask(void const * argument);
+void StartTouchTask(void const * argument);
+void StartGuiTask(void const * argument);
+void StartSoundTask(void const * argument);
+void StartFileTask(void const * argument);
+
+extern void MX_FATFS_Init(void);
+void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+
+/* USER CODE BEGIN FunctionPrototypes */
+
+/* USER CODE END FunctionPrototypes */
+
+/* Hook prototypes */
+
+/* Init FreeRTOS */
+
+void MX_FREERTOS_Init(void) {
+  /* USER CODE BEGIN Init */
+       
+	BSP_SD_Init();
+	LCD_Initializtion();
+	HAL_Delay(500);
+	GUI_Init();
+	SD_Msg_Init();
+	VS1003_Init();
+	VS1003_Reset();
+	VS1003_SoftReset();
+  /* USER CODE END Init */
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+//  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+//  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  /* definition and creation of TouchTask */
+  osThreadDef(TouchTask, StartTouchTask, osPriorityNormal, 0, 256);
+  TouchTaskHandle = osThreadCreate(osThread(TouchTask), NULL);
+
+  /* definition and creation of GuiTask */
+  osThreadDef(GuiTask, StartGuiTask, osPriorityNormal, 0, 512);
+  GuiTaskHandle = osThreadCreate(osThread(GuiTask), NULL);
+
+  /* definition and creation of SoundTask */
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+}
+
+/* StartDefaultTask function */
+void StartDefaultTask(void const * argument)
+{
+
+  /* USER CODE BEGIN StartDefaultTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(500);
+  }
+  /* USER CODE END StartDefaultTask */
+}
+
+/* StartTouchTask function */
+void StartTouchTask(void const * argument)
+{
+  /* USER CODE BEGIN StartTouchTask */
+  /* Infinite loop */
+  for(;;)
+  {
+	GUI_TOUCH_Exec();
+	osDelay(100);
+  }
+  /* USER CODE END StartTouchTask */
+}
+
+/* StartGuiTask function */
+void StartGuiTask(void const * argument)
+{
+	int sel_now=0, sel_prev=0;
+	int type;
+	int button_sel;
+	char * name;
+	EDIT_Handle hPath;
+	EDIT_Handle hState;
+	LISTBOX_Handle hListBox;
+	BUTTON_Handle   hButton[2];
+  /* USER CODE BEGIN StartGuiTask */
+//	hMem = GUI_ALLOC_AllocZero(100);
+//	name = GUI_ALLOC_h2p(hMem);
+	
+	osThreadDef(FileTask, StartFileTask, osPriorityAboveNormal, 0, 512);
+	/* init code for FATFS */
+	MX_FATFS_Init();
+
+	_ExecCalibration();
+	GUI_Clear();
+	
+	if(0 == FileSystem_Init())
+	{
+		GUI_Text(0, 200,(uint8_t*)"mount fail",Red,Black);
+	}
+	
+	hPath = EDIT_Create(FILE_NAME_X,FILE_NAME_Y,
+						FILE_NAME_W, FILE_NAME_H,
+						FILE_NAME_ID, 255, WM_CF_SHOW|EDIT_CF_VCENTER|EDIT_CF_LEFT);
+	EDIT_SetFont(hPath, &GUI_Font13_ASCII);
+	
+	hState = EDIT_Create(CUR_STATE_X,CUR_STATE_Y,
+						CUR_STATE_W, CUR_STATE_H,
+						CUR_STATE_ID, 255, WM_CF_SHOW|EDIT_CF_VCENTER|EDIT_CF_LEFT);
+	EDIT_SetFont(hState, &GUI_Font13_ASCII);
+	
+	hButton[0] = BUTTON_Create(BTN_BACK_X, BTN_BACK_Y, 
+								BTN_BACK_W, BTN_BACK_H, 
+								BTN_BACK_ID,BUTTON_CF_SHOW );
+	BUTTON_SetText (hButton[0], "Back");
+	hButton[1] = BUTTON_Create(BTN_SELECT_X, BTN_SELECT_Y, 
+								BTN_SELECT_W, BTN_SELECT_H, 
+								BTN_SELECT_ID,BUTTON_CF_SHOW );
+	BUTTON_SetText (hButton[1], "Select");
+	
+   	hListBox = LISTBOX_Create(0, 
+							FILE_LIST_X, FILE_LIST_Y, 
+							FILE_LIST_W, FILE_LIST_H, WM_CF_SHOW);
+	LISTBOX_SetFont(hListBox, &GUI_Font13_ASCII);
+	SCROLLBAR_CreateAttached(hListBox, SCROLLBAR_CF_VERTICAL);
+	GetCurrentDir();
+	UpdateList(hListBox);
+	EDIT_SetText(hPath, (const char *)GetCurrentFilePath());
+	
+	WM_ExecIdle();
+	
+  /* Infinite loop */
+  for(;;)
+  {
+	sel_now = LISTBOX_GetSel(hListBox);
+	if(sel_now != sel_prev)
+	{
+		sel_prev = sel_now;
+		type = ToSelecteDir(hListBox, sel_now);
+		if(type == TYPE_DIRECTORY || type == TYPE_UPPER)
+		{
+			GetCurrentDir();
+			UpdateList(hListBox);
+			EDIT_SetText(hPath, (const char *)GetCurrentFilePath());
+		}
+		if(type == TYPE_FILE)
+		{
+			if(CheckSelectedFileExtension(hListBox, sel_now, "MP3"))
+			{
+				if(SoundTaskHandle == 0 ||
+					((osThreadGetState(SoundTaskHandle) != osThreadReady) ||
+					(osThreadGetState(SoundTaskHandle) != osThreadRunning)))
+				{
+					name = GetSelectedFilePath(hListBox, sel_now);
+					if(f_open(&fileR, name, FA_OPEN_EXISTING | FA_READ) 
+						== FR_OK)
+					{
+						//osThreadTerminate(SoundTaskHandle);
+						EDIT_SetText(hPath, "Stoped...");
+						FileTaskHandle = osThreadCreate(osThread(FileTask), &fileR);
+						EDIT_SetText(hPath, "Start...");
+					}
+					else
+					{
+						EDIT_SetText(hPath, "Open fail");
+					}
+				}
+				else
+				{
+					EDIT_SetText(hPath, "Playing...");
+				}
+			}
+			else
+			{
+				EDIT_SetText(hPath, "Can't Play");
+			}
+		}
+	}
+	button_sel = GUI_GetKey();
+	if(button_sel == BTN_BACK_ID)
+	{
+		ToUpperDir();
+		GetCurrentDir();
+		UpdateList(hListBox);
+		EDIT_SetText(hPath, (const char *)GetCurrentFilePath());
+	}
+	if(button_sel == BTN_SELECT_ID)
+	{
+		VS1003_SineTest();
+	}
+	//GUI_Text(90,0,(uint8_t*)"test",Red,Black);
+	GUI_Delay(100);
+  }
+  /* USER CODE END StartGuiTask */
+}
+
+volatile uint32_t play_comp[2];
+uint8_t temp[50];
+/* StartSoundTask function */
+void StartSoundTask(void const * argument)
+{
+	osEvent evt;
+	int start_play = 0;
+	audio_msg_t * ptrMsg;
+	uint32_t pretime, curtime;
+	
+	play_comp[0] = 1;
+	play_comp[1] = 1;
+  /* USER CODE BEGIN StartSoundTask */
+  /* Infinite loop */
+	for(;;)
+	{
+		evt = osMessageGet(AudioQueue, osWaitForever);
+		if (evt.status == osEventMessage) {
+			ptrMsg = (audio_msg_t *)evt.value.p;
+			start_play = ptrMsg->audio_state;
+			if(start_play == PLAY_STATE_END)
+				break;
+			
+			VS1003_WriteData_DMA((uint8_t *)ptrMsg->buffer, ptrMsg->data_size);
+			
+			osSignalWait(PLAY_STATE_ING, osWaitForever);
+			
+			osSignalSet(FileTaskHandle, start_play);
+			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+		}
+		/*
+		if(start_play)
+		{
+			//if(VS1003_WriteData_DMA_ING() == 0)
+			if(GetVS1003State())
+			{
+				osSignalSet(FileTaskHandle, start_play);
+				play_comp[start_play-1] = 1;
+				HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+				start_play = 0;
+				
+				//curtime = GUI_X_GetTime();
+				//sprintf(temp,"AUDIO : %d  ", curtime-pretime);
+				//GUI_Text(0, 130,(uint8_t*)temp,Red,Black);
+				
+			}
+		}
+		else
+		{
+			evt = osMessageGet(AudioQueue, osWaitForever);
+			if (evt.status == osEventMessage) {
+				ptrMsg = (audio_msg_t *)evt.value.p;
+				start_play = ptrMsg->audio_state;
+				if(start_play == PLAY_STATE_END)
+					break;
+				
+				//pretime = GUI_X_GetTime();
+				VS1003_WriteData_DMA((uint8_t *)ptrMsg->buffer, ptrMsg->data_size);
+			}
+		}
+		osDelay(1);
+		*/
+	}
+
+    osThreadTerminate(NULL);
+  /* USER CODE END StartSoundTask */
+}
+
+void StartFileTask(void const * argument)
+{
+	/*
+	GUI_HMEM hFatFsMem;
+	FATFS * ptrFatFs;
+	GUI_HMEM hFileMem;
+	TCHAR * path = (TCHAR *)argument;
+	*/
+	FIL * ptrFile = (FIL *)argument;
+	
+	GUI_HMEM hMem1, hMem2;
+	char * ptrAudio1, *ptrAudio2;
+	uint32_t audio_total_size;
+	uint32_t audio_play_size;
+	uint32_t readByte;
+	uint32_t temp_cnt;
+	uint32_t pretime, curtime;
+	
+	GUI_HMEM hMsgMem1, hMsgMem2;
+	audio_msg_t * ptrMsg1, *ptrMsg2;
+	int play_state = PLAY_STATE_1;
+	
+	osThreadDef(SoundTask, StartSoundTask, osPriorityHigh, 0, 512);
+	// 파일 시스템 준비
+	/*
+	hFatFsMem = GUI_ALLOC_AllocZero(sizeof(FATFS));
+	ptrFatFs = (FATFS *)GUI_ALLOC_h2p(hFatFsMem);
+	if(FR_OK != f_mount(ptrFatFs, "1:\\", 1))
+	{
+		GUI_ALLOC_Free(hFatFsMem);
+		osThreadTerminate(NULL);
+		return;
+	}
+	// 파일 열기
+	hFileMem = GUI_ALLOC_AllocZero(sizeof(FIL));
+	ptrFile = (FIL *)GUI_ALLOC_h2p(hFileMem);
+	path[0] = '1';
+	if(FR_OK != f_open(ptrFile, path, FA_OPEN_EXISTING | FA_READ))
+	{
+		GUI_ALLOC_Free(hFatFsMem);
+		GUI_ALLOC_Free(hFileMem);
+		osThreadTerminate(NULL);
+		return;
+	}
+	*/
+	// 오디오 버퍼 할당
+	hMem1 = GUI_ALLOC_AllocZero(FILE_SAVE_SIZE);
+	ptrAudio1 = GUI_ALLOC_h2p(hMem1);
+	
+	hMem2 = GUI_ALLOC_AllocZero(FILE_SAVE_SIZE);
+	ptrAudio2 = GUI_ALLOC_h2p(hMem2);
+	// MP3 헤더 읽기 및 분석
+	f_read (ptrFile, ptrAudio1, 256, &readByte);
+	temp_cnt = 10;
+	temp_cnt += ptrAudio1[ID3v2_SIZE_POS+3];
+	temp_cnt += ptrAudio1[ID3v2_SIZE_POS+2]<<7;
+	temp_cnt += ptrAudio1[ID3v2_SIZE_POS+1]<<14;
+	temp_cnt += ptrAudio1[ID3v2_SIZE_POS]<<21;
+	if((ptrAudio1[ID3v2_FLAGS_POS])&FOOTER_PRESEND_FLAG)
+	{
+		temp_cnt += 10;
+	}
+	f_lseek(ptrFile, temp_cnt);
+	audio_total_size = ptrFile->obj.objsize - temp_cnt;
+	audio_play_size = 0;
+	// 메시지 큐 생성
+	hMsgMem1 = GUI_ALLOC_AllocZero(sizeof(audio_msg_t));
+	ptrMsg1 = (audio_msg_t *)GUI_ALLOC_h2p(hMsgMem1);
+	hMsgMem2 = GUI_ALLOC_AllocZero(sizeof(audio_msg_t));
+	ptrMsg2 = (audio_msg_t *)GUI_ALLOC_h2p(hMsgMem2);
+    AudioQueue = osMessageCreate(osMessageQ(AudioQueue), NULL);
+	
+	
+		f_read (ptrFile, ptrAudio1, FILE_SAVE_SIZE, &readByte);
+		audio_play_size += readByte;
+
+		ptrMsg1->audio_state = PLAY_STATE_1;
+		ptrMsg1->buffer = ptrAudio1;
+		ptrMsg1->data_size = readByte;
+		osMessagePut(AudioQueue, (uint32_t)ptrMsg1, osWaitForever);
+		
+		
+		f_read (ptrFile, ptrAudio2, FILE_SAVE_SIZE, &readByte);
+		audio_play_size += readByte;
+		
+		ptrMsg2->audio_state = PLAY_STATE_2;
+		ptrMsg2->buffer = ptrAudio2;
+		ptrMsg2->data_size = readByte;
+		osMessagePut(AudioQueue, (uint32_t)ptrMsg2, osWaitForever);
+		play_state = PLAY_STATE_1;
+		
+	// 사운드 재생 스레드 실행
+	SoundTaskHandle = osThreadCreate(osThread(SoundTask), NULL);
+	
+	for(;;)
+	{
+		if(play_state == PLAY_STATE_1)
+		{
+			osSignalWait(PLAY_STATE_1, osWaitForever);
+			//if(play_comp[0])
+			{
+				
+				f_read (ptrFile, ptrAudio1, FILE_SAVE_SIZE, &readByte);
+				audio_play_size += readByte;
+				/*
+				curtime = GUI_X_GetTime();
+				sprintf(temp,"SDCARD : %d  ", curtime-pretime);
+				GUI_Text(0, 150,(uint8_t*)temp,Red,Black);
+				*/
+				ptrMsg1->audio_state = PLAY_STATE_1;
+				ptrMsg1->buffer = ptrAudio1;
+				ptrMsg1->data_size = readByte;
+				osMessagePut(AudioQueue, (uint32_t)ptrMsg1, osWaitForever);
+					
+				HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+				play_state = PLAY_STATE_2;
+				play_comp[0] = 0;
+				//pretime = GUI_X_GetTime();
+			}
+		}
+		
+		if(play_state == PLAY_STATE_2)
+		{
+			//if(play_comp[1])
+			{
+				osSignalWait(PLAY_STATE_2, osWaitForever);
+				f_read (ptrFile, ptrAudio2, FILE_SAVE_SIZE, &readByte);
+				audio_play_size += readByte;
+				
+				ptrMsg2->audio_state = PLAY_STATE_2;
+				ptrMsg2->buffer = ptrAudio2;
+				ptrMsg2->data_size = readByte;
+				osMessagePut(AudioQueue, (uint32_t)ptrMsg2, osWaitForever);
+				
+				play_state = PLAY_STATE_1;
+				play_comp[1] = 0;
+			}
+		}
+		
+		if(readByte == 0)
+		{
+			if(play_state == PLAY_STATE_1)
+			{
+				ptrMsg1->audio_state = PLAY_STATE_END;
+				osMessagePut(AudioQueue, (uint32_t)ptrMsg1, osWaitForever);
+			}
+			if(play_state == PLAY_STATE_2)
+			{	
+				ptrMsg2->audio_state = PLAY_STATE_END;
+				osMessagePut(AudioQueue, (uint32_t)ptrMsg2, osWaitForever);
+			}
+			break;
+		}
+		osDelay(1);
+	}
+	f_close(ptrFile);
+//	GUI_ALLOC_Free(hFatFsMem);
+//	GUI_ALLOC_Free(hFileMem);
+	GUI_ALLOC_Free(hMsgMem1);
+	GUI_ALLOC_Free(hMsgMem2);
+	GUI_ALLOC_Free(hMem1);
+	GUI_ALLOC_Free(hMem2);
+	
+    osThreadTerminate(NULL);
+}
+
+/* USER CODE BEGIN Application */
+     
+/* USER CODE END Application */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
