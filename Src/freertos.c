@@ -122,11 +122,11 @@ void MX_FREERTOS_Init(void)
 //  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of TouchTask */
-  osThreadDef(TouchTask, StartTouchTask, osPriorityAboveNormal, 0, 256);
+  osThreadDef(TouchTask, StartTouchTask, osPriorityHigh, 0, 256);
   TouchTaskHandle = osThreadCreate(osThread(TouchTask), NULL);
 
   /* definition and creation of GuiTask */
-  osThreadDef(GuiTask, StartGuiTask, osPriorityNormal, 0, 512);
+  osThreadDef(GuiTask, StartGuiTask, osPriorityAboveNormal, 0, 512);
   GuiTaskHandle = osThreadCreate(osThread(GuiTask), NULL);
 
   /* definition and creation of SoundTask */
@@ -177,7 +177,7 @@ void StartGuiTask(void const * argument)
 	LISTBOX_Handle hListBox;
   /* USER CODE BEGIN StartGuiTask */
 	
-	osThreadDef(FileTask, StartFileTask, osPriorityAboveNormal, 0, 512);
+	osThreadDef(FileTask, StartFileTask, osPriorityNormal, 0, 512);
 	/* init code for FATFS */
 	MX_FATFS_Init();
 	// Mount FileSystem
@@ -230,7 +230,7 @@ void StartGuiTask(void const * argument)
 				if(GetPlayState() != SOUND_PLAY_NONE)
 				{
 					GUI_SetCurrentState("Force Stop...");
-					osSignalSet(FileTaskHandle, PLAY_STOP);
+					Sound_ReqEnd();
 					osSignalWait(PLAY_SOUND_CPLT, osWaitForever);
 					osDelay(30);
 				} 
@@ -264,8 +264,10 @@ void StartGuiTask(void const * argument)
 			case BTN_STOP_ID:
 				if(GetPlayState() != SOUND_PLAY_NONE)
 				{
-					osSignalSet(FileTaskHandle, PLAY_STOP);
+					//osSignalSet(FileTaskHandle, PLAY_STOP);
+					Sound_ReqEnd();
 					osSignalWait(PLAY_SOUND_CPLT, osWaitForever);
+					osDelay(30);
 				}
 				break;
 			case BTN_VOL_UP_ID:
@@ -316,6 +318,7 @@ void StartSoundTask(void const * argument)
 	{
 		if(SOUND_OK != Sound_Playing())
 			break;
+		osDelay(1);
 	}
 	
 	osSignalSet(FileTaskHandle, PLAY_SOUND_END);
@@ -328,7 +331,7 @@ void StartFileTask(void const * argument)
 	extern uint32_t sd_error_test;
 	TCHAR * path = (TCHAR *)argument;
 	sound_result_t ret;
-	osThreadDef(SoundTask, StartSoundTask, osPriorityHigh, 0, 512);
+	osThreadDef(SoundTask, StartSoundTask, osPriorityNormal, 0, 512);
 	
 	GUI_SetDirPath(path);
 		
@@ -409,7 +412,7 @@ void StartFileTask(void const * argument)
 		ret = Sound_Buffering();
 		if(SOUND_OK != ret)
 			break;
-		osDelay(20);
+		osDelay(10);
 	}
 	
 	osSignalWait(PLAY_SOUND_END, osWaitForever);

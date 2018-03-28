@@ -41,6 +41,9 @@ audio_msg_t * ptrMsgEnd = &orgMsgEnd;
 osMessageQId AudioQueue;
 osMessageQDef(AudioQueue, 3, audio_msg_t);
 
+osMessageQId BufferQueue;
+osMessageQDef(BufferQueue, 3, buffering_state_t);
+
 static void MemFree(void);
 
 void Sound_VolOff(void)
@@ -151,6 +154,7 @@ int Sound_Init(char * f_path)
 	audio_play_size = 0;
 	
 	AudioQueue = osMessageCreate(osMessageQ(AudioQueue), NULL);
+	BufferQueue = osMessageCreate(osMessageQ(BufferQueue), NULL);
 	
 	play_state = SOUND_PLAY_INIT;
 	buffer_state = PLAY_NONE;
@@ -233,91 +237,90 @@ sound_result_t Sound_Buffering(void)
 	if(play_state != SOUND_PLAY_PLAYING)
 		return SOUND_ERR;
 	
-	do
-	{
-		evt2 = osSignalWait(0, osWaitForever);
-	} while(evt2.status != osEventSignal);
-	currentSignal = evt2.value.signals;
-	
-	//if(buffer_state == PLAY_BUFFER_1)
-	if(currentSignal & PLAY_BUFFER_1)
-	{
-		//osSignalWait(PLAY_BUFFER_1, osWaitForever);
-		fres = User_f_read (ptrFile, ptrAudio1, SOUND_BUFFER_SIZE, &readByte);
-		audio_play_size += readByte;
-		
-		if(readByte == 0)	buffer_state = PLAY_BUFFER_END;
-		else				buffer_state = PLAY_BUFFER_1;
-		
-		ptrMsg1->play_state = buffer_state;
-		ptrMsg1->buffer = ptrAudio1;
-		ptrMsg1->data_size = readByte;
-		osMessagePut(AudioQueue, (uint32_t)ptrMsg1, osWaitForever);
+	evt2 = osMessageGet(BufferQueue, osWaitForever);
+	if (evt2.status == osEventMessage) {
+		currentSignal = evt2.value.v;
+		//if(buffer_state == PLAY_BUFFER_1)
+		if(currentSignal == PLAY_BUFFER_1)
+		{
+			//osSignalWait(PLAY_BUFFER_1, osWaitForever);
+			fres = User_f_read (ptrFile, ptrAudio1, SOUND_BUFFER_SIZE, &readByte);
+			audio_play_size += readByte;
+			
+			if(readByte == 0)	buffer_state = PLAY_BUFFER_END;
+			else				buffer_state = PLAY_BUFFER_1;
+			
+			ptrMsg1->play_state = buffer_state;
+			ptrMsg1->buffer = ptrAudio1;
+			ptrMsg1->data_size = readByte;
+			osMessagePut(AudioQueue, (uint32_t)ptrMsg1, osWaitForever);
 
-		if(fres != FR_OK)
-		{
-			sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
-			GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
-			User_f_close(ptrFile);
-			return SOUND_ERR;
+			if(fres != FR_OK)
+			{
+				sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
+				GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
+				User_f_close(ptrFile);
+				return SOUND_ERR;
+			}
+			if(buffer_state == PLAY_BUFFER_END)
+			{
+				sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
+				GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
+				User_f_close(ptrFile);
+				return SOUND_END;
+			}
+			buffer_state = PLAY_BUFFER_2;
+			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+			
+			ret = SOUND_OK;
 		}
-		if(buffer_state == PLAY_BUFFER_END)
+		//if(buffer_state == PLAY_BUFFER_2)
+		if(currentSignal == PLAY_BUFFER_2)
 		{
-			sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
-			GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
-			User_f_close(ptrFile);
-			return SOUND_END;
-		}
-		buffer_state = PLAY_BUFFER_2;
-		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-		
-		ret = SOUND_OK;
-	}
-	//if(buffer_state == PLAY_BUFFER_2)
-	if(currentSignal & PLAY_BUFFER_2)
-	{
-		//sSignalWait(PLAY_BUFFER_2, osWaitForever);
-		fres = User_f_read (ptrFile, ptrAudio2, SOUND_BUFFER_SIZE, &readByte);
-		audio_play_size += readByte;
-		
-		if(readByte == 0)	buffer_state = PLAY_BUFFER_END;
-		else				buffer_state = PLAY_BUFFER_2;
-		
-		ptrMsg2->play_state = buffer_state;
-		ptrMsg2->buffer = ptrAudio2;
-		ptrMsg2->data_size = readByte;
-		osMessagePut(AudioQueue, (uint32_t)ptrMsg2, osWaitForever);
+			//sSignalWait(PLAY_BUFFER_2, osWaitForever);
+			fres = User_f_read (ptrFile, ptrAudio2, SOUND_BUFFER_SIZE, &readByte);
+			audio_play_size += readByte;
+			
+			if(readByte == 0)	buffer_state = PLAY_BUFFER_END;
+			else				buffer_state = PLAY_BUFFER_2;
+			
+			ptrMsg2->play_state = buffer_state;
+			ptrMsg2->buffer = ptrAudio2;
+			ptrMsg2->data_size = readByte;
+			osMessagePut(AudioQueue, (uint32_t)ptrMsg2, osWaitForever);
 
-		if(fres != FR_OK)
-		{
-			sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
-			GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
-			User_f_close(ptrFile);
-			return SOUND_ERR;
+			if(fres != FR_OK)
+			{
+				sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
+				GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
+				User_f_close(ptrFile);
+				return SOUND_ERR;
+			}
+			if(buffer_state == PLAY_BUFFER_END)
+			{
+				sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
+				GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
+				User_f_close(ptrFile);
+				return SOUND_END;
+			}
+			buffer_state = PLAY_BUFFER_1;
+			
+			ret = SOUND_OK;
 		}
-		if(buffer_state == PLAY_BUFFER_END)
-		{
-			sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
-			GUI_Text(0, 200,(uint8_t*)temp,Red,Black);
-			User_f_close(ptrFile);
-			return SOUND_END;
-		}
-		buffer_state = PLAY_BUFFER_1;
 		
-		ret = SOUND_OK;
+		if(currentSignal == PLAY_STOP)
+		{
+			buffer_state = PLAY_SOUND_END;
+			ptrMsgEnd->play_state = PLAY_SOUND_END;
+			ptrMsgEnd->buffer = 0;
+			ptrMsgEnd->data_size = 0;
+			osMessagePut(AudioQueue, (uint32_t)ptrMsgEnd, osWaitForever);
+			User_f_close(ptrFile);
+			
+			ret = SOUND_END;
+		}
 	}
 	
-	if(currentSignal & PLAY_STOP)
-	{
-		buffer_state = PLAY_SOUND_END;
-		ptrMsgEnd->play_state = PLAY_SOUND_END;
-		ptrMsgEnd->buffer = 0;
-		ptrMsgEnd->data_size = 0;
-		osMessagePut(AudioQueue, (uint32_t)ptrMsgEnd, osWaitForever);
-		User_f_close(ptrFile);
-		
-		ret = SOUND_END;
-	}
 	
 	return ret;
 }
@@ -349,7 +352,8 @@ sound_result_t Sound_Playing(void)
 			return SOUND_END;
 		
 		// Notify available buffer to FileTask 
-		osSignalSet(FileTaskHandle, sound_state);
+		osMessagePut(BufferQueue, (uint32_t)sound_state, osWaitForever);
+		//osSignalSet(FileTaskHandle, sound_state);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
 		
 		// Set Volume
@@ -363,6 +367,11 @@ sound_result_t Sound_Playing(void)
 	}
 	
 	return SOUND_ERR;
+}
+
+void Sound_ReqEnd(void)
+{
+	osMessagePut(BufferQueue, (uint32_t)PLAY_STOP, osWaitForever);
 }
 
 void Sound_Deinit(int close_file)

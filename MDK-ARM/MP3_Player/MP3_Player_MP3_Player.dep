@@ -650,7 +650,7 @@ I (D:\Keil_v5\ARM\ARMCC\include\math.h)(0x588B7534)
 I (..\Src\GLCD/AsciiLib.h)(0x53B13C41)
 I (D:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B7534)
 F (..\Src\uCGUI\uCGUI.lib)(0x53B13C33)()
-F (..\Src\VS1003B\vs1003.c)(0x5A78637A)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\vs1003.o --omf_browse mp3_player\vs1003.crf --depend mp3_player\vs1003.d)
+F (..\Src\VS1003B\vs1003.c)(0x5ABB8741)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\vs1003.o --omf_browse mp3_player\vs1003.crf --depend mp3_player\vs1003.d)
 I (..\Src\VS1003B\vs1003.h)(0x5A7862BC)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5A2BE655)
 I (../Inc/stm32f4xx_hal_conf.h)(0x5A6C7CD7)
@@ -700,7 +700,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h)(0x5A2BE65E)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h)(0x5A2BE65E)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x5A2BE65E)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x5A2BE65E)
-F (..\Src\VS1003B\SoundHandle.c)(0x5A7B15DA)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\soundhandle.o --omf_browse mp3_player\soundhandle.crf --depend mp3_player\soundhandle.d)
+F (..\Src\VS1003B\SoundHandle.c)(0x5ABB99A7)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\soundhandle.o --omf_browse mp3_player\soundhandle.crf --depend mp3_player\soundhandle.d)
 I (..\Src\includes.h)(0x5A75A283)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5A2BE655)
 I (../Inc/stm32f4xx_hal_conf.h)(0x5A6C7CD7)
@@ -798,7 +798,7 @@ I (..\Src\uCGUI\inc\TEXT.h)(0x53B13C43)
 I (..\Src\FileHandle/FileHandle.h)(0x5A8956DC)
 I (..\Src\WMDemo/UserGUI.h)(0x5A895515)
 I (..\Src\VS1003B/vs1003.h)(0x5A7862BC)
-I (..\Src\VS1003B/SoundHandle.h)(0x5A7B174A)
+I (..\Src\VS1003B/SoundHandle.h)(0x5ABB9992)
 I (..\Src\VS1003B/AudioFileHandle.h)(0x5A787061)
 F (..\Src\VS1003B\AudioFileHandle.c)(0x5A79AD01)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\audiofilehandle.o --omf_browse mp3_player\audiofilehandle.crf --depend mp3_player\audiofilehandle.d)
 I (..\Src\includes.h)(0x5A75A283)
@@ -898,7 +898,7 @@ I (..\Src\uCGUI\inc\TEXT.h)(0x53B13C43)
 I (..\Src\FileHandle/FileHandle.h)(0x5A8956DC)
 I (..\Src\WMDemo/UserGUI.h)(0x5A895515)
 I (..\Src\VS1003B/vs1003.h)(0x5A7862BC)
-I (..\Src\VS1003B/SoundHandle.h)(0x5A7B174A)
+I (..\Src\VS1003B/SoundHandle.h)(0x5ABB9992)
 I (..\Src\VS1003B/AudioFileHandle.h)(0x5A787061)
 F (../Src/gpio.c)(0x5A6C7CD3)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\gpio.o --omf_browse mp3_player\gpio.crf --depend mp3_player\gpio.d)
 I (../Inc/gpio.h)(0x5A6C7CD3)
@@ -1054,7 +1054,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h)(0x5A2BE656)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h)(0x5A2BE656)
 I (../Inc/gpio.h)(0x5A6C7CD3)
 I (../Inc/dma.h)(0x5A6C7CD4)
-F (../Src/freertos.c)(0x5A895CF3)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\freertos.o --omf_browse mp3_player\freertos.crf --depend mp3_player\freertos.d)
+F (../Src/freertos.c)(0x5ABB9C8D)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\freertos.o --omf_browse mp3_player\freertos.crf --depend mp3_player\freertos.d)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h)(0x5A2BE65E)
 I (D:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588B7534)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B7534)
@@ -1152,7 +1152,7 @@ I (..\Src\uCGUI\inc\TEXT.h)(0x53B13C43)
 I (../Src/FileHandle/FileHandle.h)(0x5A8956DC)
 I (../Src/WMDemo/UserGUI.h)(0x5A895515)
 I (../Src/VS1003B/vs1003.h)(0x5A7862BC)
-I (../Src/VS1003B/SoundHandle.h)(0x5A7B174A)
+I (../Src/VS1003B/SoundHandle.h)(0x5ABB9992)
 I (../Src/VS1003B/AudioFileHandle.h)(0x5A787061)
 I (../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h)(0x5A2BE65E)
 I (../Middlewares/Third_Party/FatFs/src/diskio.h)(0x5A2BE65E)
@@ -1582,7 +1582,7 @@ I (..\Src\uCGUI\inc\TEXT.h)(0x53B13C43)
 I (..\Src\FileHandle/FileHandle.h)(0x5A8956DC)
 I (..\Src\WMDemo/UserGUI.h)(0x5A895515)
 I (..\Src\VS1003B/vs1003.h)(0x5A7862BC)
-I (..\Src\VS1003B/SoundHandle.h)(0x5A7B174A)
+I (..\Src\VS1003B/SoundHandle.h)(0x5ABB9992)
 I (..\Src\VS1003B/AudioFileHandle.h)(0x5A787061)
 F (../Src/system_stm32f4xx.c)(0x5A2BE62C)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Drivers/CMSIS/Include -I ../Middlewares/Third_Party/FatFs/src -I ..\Src -I ..\Src\uCGUI\inc -I ..\Src\uCGUI\Config --C99-I.\RTE\_MP3_Player-ID:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include-ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o mp3_player\system_stm32f4xx.o --omf_browse mp3_player\system_stm32f4xx.crf --depend mp3_player\system_stm32f4xx.d)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x5A2BE62B)
@@ -2631,5 +2631,5 @@ I (..\Src\uCGUI\inc\TEXT.h)(0x53B13C43)
 I (..\Src\FileHandle/FileHandle.h)(0x5A8956DC)
 I (..\Src\WMDemo/UserGUI.h)(0x5A895515)
 I (..\Src\VS1003B/vs1003.h)(0x5A7862BC)
-I (..\Src\VS1003B/SoundHandle.h)(0x5A7B174A)
+I (..\Src\VS1003B/SoundHandle.h)(0x5ABB9992)
 I (..\Src\VS1003B/AudioFileHandle.h)(0x5A787061)

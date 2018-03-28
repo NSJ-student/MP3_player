@@ -59,6 +59,7 @@ void Sound_Deinit(int close_file);
 sound_result_t Sound_PlayStart(void);
 sound_result_t Sound_Buffering(void);
 sound_result_t Sound_Playing(void);
+void Sound_ReqEnd(void);
 play_state_t GetPlayState(void);
 void SetPlayState(play_state_t state);
 int MemAlloc(void);
