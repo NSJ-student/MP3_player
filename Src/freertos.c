@@ -122,11 +122,11 @@ void MX_FREERTOS_Init(void)
 //  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of TouchTask */
-  osThreadDef(TouchTask, StartTouchTask, osPriorityHigh, 0, 256);
+  osThreadDef(TouchTask, StartTouchTask, osPriorityAboveNormal, 0, 256);
   TouchTaskHandle = osThreadCreate(osThread(TouchTask), NULL);
 
   /* definition and creation of GuiTask */
-  osThreadDef(GuiTask, StartGuiTask, osPriorityAboveNormal, 0, 512);
+  osThreadDef(GuiTask, StartGuiTask, osPriorityNormal, 0, 512);
   GuiTaskHandle = osThreadCreate(osThread(GuiTask), NULL);
 
   /* definition and creation of SoundTask */
@@ -177,7 +177,7 @@ void StartGuiTask(void const * argument)
 	LISTBOX_Handle hListBox;
   /* USER CODE BEGIN StartGuiTask */
 	
-	osThreadDef(FileTask, StartFileTask, osPriorityNormal, 0, 512);
+	osThreadDef(FileTask, StartFileTask, osPriorityAboveNormal, 0, 512);
 	/* init code for FATFS */
 	MX_FATFS_Init();
 	// Mount FileSystem
@@ -331,7 +331,7 @@ void StartFileTask(void const * argument)
 	extern uint32_t sd_error_test;
 	TCHAR * path = (TCHAR *)argument;
 	sound_result_t ret;
-	osThreadDef(SoundTask, StartSoundTask, osPriorityNormal, 0, 512);
+	osThreadDef(SoundTask, StartSoundTask, osPriorityHigh, 0, 512);
 	
 	GUI_SetDirPath(path);
 		

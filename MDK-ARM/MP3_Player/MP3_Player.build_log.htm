@@ -27,23 +27,43 @@ Project File Date:  02/15/2018
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'MP3_Player'
-compiling freertos.c...
-../Src/freertos.c(187): warning:  #223-D: function "_ExecCalibration" declared implicitly
-  	_ExecCalibration();
-../Src/freertos.c(341): warning:  #188-D: enumerated type mixed with another type
-  	ret = Sound_Init(path);
-../Src/freertos.c(353): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  				sprintf(temp,"Init error: %d  ", sd_error_test);
-../Src/freertos.c(359): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  				sprintf(temp,"Init error: %d  ", sd_error_test);
-../Src/freertos.c(391): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  				sprintf(temp,"Init error: %d  ", sd_error_test);
-../Src/freertos.c(397): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  				sprintf(temp,"Init error: %d  ", sd_error_test);
-../Src/freertos.c: 6 warnings, 0 errors
+compiling SoundHandle.c...
+..\Src\VS1003B\SoundHandle.c(63): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  	sprintf(temp, "%3d", volume_cur);
+..\Src\VS1003B\SoundHandle.c(83): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  	sprintf(temp, "%3d", volume_cur);
+..\Src\VS1003B\SoundHandle.c(124): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  		sprintf(temp,"Init: %d  ", fres);
+..\Src\VS1003B\SoundHandle.c(147): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  		sprintf(temp,"Time: %.3f sec ", WVA_CalPlayTime(ptrFile));
+..\Src\VS1003B\SoundHandle.c(148): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *"
+  		GUI_SetFileLen(temp);
+..\Src\VS1003B\SoundHandle.c(111): warning:  #177-D: variable "readByte"  was declared but never referenced
+  	uint32_t readByte;
+..\Src\VS1003B\SoundHandle.c(112): warning:  #177-D: variable "mp3_hdr"  was declared but never referenced
+  	MP3_ID3v2 * mp3_hdr;
+..\Src\VS1003B\SoundHandle.c(184): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  			sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(191): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  			sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(212): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  			sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(219): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  			sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(260): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  				sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(267): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  				sprintf(temp,"File1: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(294): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  				sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(301): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
+  				sprintf(temp,"File2: size(%d) / %d  ", readByte, fres);
+..\Src\VS1003B\SoundHandle.c(7): warning:  #550-D: variable "audio_total_size"  was set but never used
+  static uint32_t audio_total_size;
+..\Src\VS1003B\SoundHandle.c: 16 warnings, 0 errors
 linking...
 Program Size: Code=82384 RO-data=9168 RW-data=916 ZI-data=33724  
-"MP3_Player\MP3_Player.axf" - 0 Error(s), 6 Warning(s).
+"MP3_Player\MP3_Player.axf" - 0 Error(s), 16 Warning(s).
 
 <h2>Software Packages used:</h2>
 
